@@ -27,8 +27,7 @@ type ElementConstructor<P> =
   | (new () => { $props: P })
   | ((props: P, ...args: any) => FunctionalComponent<any, any>)
 
-// <T extends keyof JSX.IntrinsicElements | ElementConstructor<any>>
-type ComponentProps<T> =
+type ComponentProps<T extends keyof JSX.IntrinsicElements | ElementConstructor<any>> =
   T extends ElementConstructor<infer P>
     ? P
     : T extends keyof JSX.IntrinsicElements
@@ -37,7 +36,7 @@ type ComponentProps<T> =
 
  type ComponentType<T = {}> = DefineComponent<T> | FunctionalComponent<T>
 
- type ComponentPropsWithoutRef<T> = PropsWithoutRef<
+ type ComponentPropsWithoutRef<T extends ElementType> = PropsWithoutRef<
   ComponentProps<T>
 >
 

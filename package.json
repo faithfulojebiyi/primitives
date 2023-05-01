@@ -11,6 +11,8 @@
     "test:watch": "vitest --watch",
     "coverage": "vitest run --coverage",
     "dev": "pnpm storybook dev -p 6006",
+    "dev:watch:core": "turbo run dev --filter='./packages/core/**'",
+    "dev:watch:components": "turbo run dev --filter='./packages/components/**'",
     "build:storybook": "pnpm storybook build"
   },
   "devDependencies": {
