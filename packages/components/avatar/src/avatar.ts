@@ -159,7 +159,7 @@ const AvatarFallback = defineComponent<ScopedProps<AvatarFallbackProps>>({
   setup(props, { attrs, emit, slots }) {
     const canRender = ref(false)
     const { __scopeAvatar, ...fallbackProps } = attrs as any
-    // avatar: identifier 'h' has already been declared - nuxt 3 #50 => hata aşağıdaki koddan kaynaklı oluşuyor
+    // @productdevbook avatar: identifier 'h' has already been declared - nuxt 3 #50 => the error is caused by the following code, it should be fixed
     // const provide = useAvatarInject(FALLBACK_NAME, __scopeAvatar)
 
     const forwardedRef = ref<PrimitiveSpanElement>()
