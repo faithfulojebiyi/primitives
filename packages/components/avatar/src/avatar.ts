@@ -157,34 +157,33 @@ const AvatarFallback = defineComponent<ScopedProps<AvatarFallbackProps>>({
   name: FALLBACK_NAME,
   inheritAttrs: false,
   setup(props, { attrs, emit, slots }) {
-    const forwardedRef = ref<PrimitiveSpanElement>()
+    const canRender = ref(false)
+    const { __scopeAvatar, ...fallbackProps } = attrs as any
+    // avatar: identifier 'h' has already been declared - nuxt 3 #50 => hata aşağıdaki koddan kaynaklı oluşuyor
+    // const provide = useAvatarInject(FALLBACK_NAME, __scopeAvatar)
 
+    const forwardedRef = ref<PrimitiveSpanElement>()
     onMounted(() => {
       emit('update:ref', forwardedRef.value)
     })
 
-    const { __scopeAvatar, delayms, ...fallbackProps } = attrs as any
-    const provide = useAvatarInject(FALLBACK_NAME, __scopeAvatar)
-    const canRender = ref(delayms === undefined)
-
     watchEffect(() => {
-      if (delayms === undefined) {
-        const timerID = window.setTimeout(() => {
-          canRender.value = true
-        }, delayms)
-        return () => window.clearTimeout(timerID)
-      }
+      const timerID = setTimeout(() => {
+        canRender.value = true
+      }, props.delayms)
+      return () => clearTimeout(timerID)
     })
 
-    return () => (canRender.value && (provide.value.imageLoadingStatus !== 'loaded'))
-      ? h(
-        Primitive.span, {
-          ...fallbackProps,
-          ref: forwardedRef,
-        },
-        slots.default && slots.default(),
-      )
-      : null
+    return () =>
+      canRender.value // (canRender.value && (provide.value.imageLoadingStatus !== 'loaded'))
+        ? h(
+          Primitive.span, {
+            ...fallbackProps,
+            ref: forwardedRef,
+          },
+          slots.default?.(),
+        )
+        : null
   },
 })
 
